@@ -1,0 +1,14 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aeroops
+    username: ${DB_USER:aeroops}
+    password: ${DB_PASS:aeroops}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+
+cors:
+  allowed-origins: http://localhost:4200

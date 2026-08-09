@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: aeroops-rak
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  jackson:
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.onda.aeroops: DEBUG
+
+jwt:
+  secret: ${JWT_SECRET:aeroops-rak-secret-key-2026-change-en-production}
+  access-token-expiration: 3600000
+  refresh-token-expiration: 604800000
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
