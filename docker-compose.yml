@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: aeroops-db
+    environment:
+      POSTGRES_DB: aeroops
+      POSTGRES_USER: aeroops
+      POSTGRES_PASSWORD: aeroops
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aeroops -d aeroops"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aeroops-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aeroops-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:postgresql://db:5432/aeroops
+      DB_USER: aeroops
+      DB_PASS: aeroops
+      JWT_SECRET: aeroops-rak-secret-key-2026
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - aeroops-network
+
+volumes:
+  pgdata:
+
+networks:
+  aeroops-network:
+    driver: bridge
